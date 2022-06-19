@@ -12,11 +12,14 @@ class LanceTest extends TestCase
   /**
    * @dataProvider geraLances
    */
-  public function testLeilaoDeveReceberLances(int $quantidade, Leilao $leilao, array $valores)
-  {
+  public function testLeilaoDeveReceberLances(
+    int $quantidade, 
+    Leilao $leilao, 
+    array $valores
+  ){
     static::assertCount($quantidade, $leilao->getLances());
-    foreach ($valores as $i => $valor) {
-      static::assertEquals($valores[$i], $leilao->getLances()[$i]->getValor());
+    foreach ($valores as $i => $valorEsperado) {
+      static::assertEquals($valorEsperado, $leilao->getLances()[$i]->getValor());
     }
   }
 
