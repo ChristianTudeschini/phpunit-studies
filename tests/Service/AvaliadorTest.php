@@ -72,6 +72,18 @@ class AvaliadorTest extends TestCase
     $this->leiloeiro->avalia($leilao);
   }
 
+  public function testLeilaoFinalizado()
+  {
+    $this->expectException(\DomainException::class);
+    $this->expectExceptionMessage('Leilão já foi finalizado');
+
+    $leilao = new Leilao('Ingresso pro show da Dua Lipa');
+    $leilao->recebeLance(new Lance(new Usuario('Chris'), 1000));
+    $leilao->finaliza();
+
+    $this->leiloeiro->avalia($leilao);
+  }
+
   public function leilaoEmOrdemCrescente()
   {
     // Arrange

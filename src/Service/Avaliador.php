@@ -13,6 +13,10 @@ class Avaliador
 
   public function avalia(Leilao $leilao): void
   {
+    if ($leilao->foiFinalizado()) {
+      throw new \DomainException('Leilão já foi finalizado');
+    }
+
     if (empty($leilao->getLances())) {
       throw new \DomainException("Não foi possível avaliar o leilão");
     }
