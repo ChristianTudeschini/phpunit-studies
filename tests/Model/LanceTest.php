@@ -17,9 +17,9 @@ class LanceTest extends TestCase
     Leilao $leilao, 
     array $valores
   ) {
-    static::assertCount($quantidade, $leilao->getLances());
+    $this->assertCount($quantidade, $leilao->getLances());
     foreach ($valores as $i => $valorEsperado) {
-      static::assertEquals($valorEsperado, $leilao->getLances()[$i]->getValor());
+      $this->assertEquals($valorEsperado, $leilao->getLances()[$i]->getValor());
     }
   }
 
@@ -31,8 +31,8 @@ class LanceTest extends TestCase
     $leilao->recebeLance(new Lance($chris, 100));
     $leilao->recebeLance(new Lance($chris, 200));
 
-    static::assertCount(1, $leilao->getLances());
-    static::assertEquals(100, $leilao->getLances()[0]->getValor());
+    $this->assertCount(1, $leilao->getLances());
+    $this->assertEquals(100, $leilao->getLances()[0]->getValor());
   }
 
   public function testLeilaoNaoPodeReceberMaisDeCincoLancesPorUsuario()
@@ -54,8 +54,8 @@ class LanceTest extends TestCase
 
     $leilao->recebeLance(new Lance($chris, 10000));
 
-    static::assertCount(10, $leilao->getLances());
-    static::assertEquals(5000, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
+    $this->assertCount(10, $leilao->getLances());
+    $this->assertEquals(5000, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
   }
 
   public function geraLances()
