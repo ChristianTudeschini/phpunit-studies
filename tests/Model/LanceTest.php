@@ -23,20 +23,23 @@ class LanceTest extends TestCase
     }
   }
 
-  public function testLeilaoNaoPodeReceberMaisDeUmLancePorUsuario()
+  public function testLeilaoNaoPodeReceberMaisDeUmLanceConsecutivoPorUsuario()
   {
+    $this->expectException(\DomainException::class);
+    $this->expectExceptionMessage('Usuário não pode propor 2 lances seguidos');
+
     $leilao = new Leilao('Funko Pop');
     $chris = new Usuario('Chris');
 
     $leilao->recebeLance(new Lance($chris, 100));
     $leilao->recebeLance(new Lance($chris, 200));
-
-    $this->assertCount(1, $leilao->getLances());
-    $this->assertEquals(100, $leilao->getLances()[0]->getValor());
   }
 
   public function testLeilaoNaoPodeReceberMaisDeCincoLancesPorUsuario()
   {
+    $this->expectException(\DomainException::class);
+    $this->expectExceptionMessage('Usuário não pode propor mais de 5 lances por leilão');
+
     $leilao = new Leilao('Playstation 5');
     $chris = new Usuario('Chris');
     $isaias = new Usuario('Isaias');
@@ -53,9 +56,6 @@ class LanceTest extends TestCase
     $leilao->recebeLance(new Lance($isaias, 5000));
 
     $leilao->recebeLance(new Lance($chris, 10000));
-
-    $this->assertCount(10, $leilao->getLances());
-    $this->assertEquals(5000, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
   }
 
   public function geraLances()
