@@ -16,11 +16,23 @@ class LanceTest extends TestCase
     int $quantidade, 
     Leilao $leilao, 
     array $valores
-  ){
+  ) {
     static::assertCount($quantidade, $leilao->getLances());
     foreach ($valores as $i => $valorEsperado) {
       static::assertEquals($valorEsperado, $leilao->getLances()[$i]->getValor());
     }
+  }
+
+  public function testLeilaoNaoPodeReceberLancesRepetidos()
+  {
+    $leilao = new Leilao('Funko Pop');
+    $chris = new Usuario('Chris');
+
+    $leilao->recebeLance(new Lance($chris, 100));
+    $leilao->recebeLance(new Lance($chris, 200));
+
+    static::assertCount(1, $leilao->getLances());
+    static::assertEquals(100, $leilao->getLances()[0]->getValor());
   }
 
   public function geraLances()
