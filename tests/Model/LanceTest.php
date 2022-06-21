@@ -23,7 +23,7 @@ class LanceTest extends TestCase
     }
   }
 
-  public function testLeilaoNaoPodeReceberLancesRepetidos()
+  public function testLeilaoNaoPodeReceberMaisDeUmLancePorUsuario()
   {
     $leilao = new Leilao('Funko Pop');
     $chris = new Usuario('Chris');
@@ -33,6 +33,29 @@ class LanceTest extends TestCase
 
     static::assertCount(1, $leilao->getLances());
     static::assertEquals(100, $leilao->getLances()[0]->getValor());
+  }
+
+  public function testLeilaoNaoPodeReceberMaisDeCincoLancesPorUsuario()
+  {
+    $leilao = new Leilao('Playstation 5');
+    $chris = new Usuario('Chris');
+    $isaias = new Usuario('Isaias');
+
+    $leilao->recebeLance(new Lance($chris, 1000));
+    $leilao->recebeLance(new Lance($isaias, 1200));
+    $leilao->recebeLance(new Lance($chris, 1500));
+    $leilao->recebeLance(new Lance($isaias, 1700));
+    $leilao->recebeLance(new Lance($chris, 2000));
+    $leilao->recebeLance(new Lance($isaias, 2300));
+    $leilao->recebeLance(new Lance($chris, 2500));
+    $leilao->recebeLance(new Lance($isaias, 3000));
+    $leilao->recebeLance(new Lance($chris, 3200));
+    $leilao->recebeLance(new Lance($isaias, 5000));
+
+    $leilao->recebeLance(new Lance($chris, 10000));
+
+    static::assertCount(10, $leilao->getLances());
+    static::assertEquals(5000, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
   }
 
   public function geraLances()
